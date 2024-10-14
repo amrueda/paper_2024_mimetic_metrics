@@ -27,11 +27,7 @@ To run the examples, follow the instructions:
   julia --project=. -e 'using Pkg; Pkg.develop(PackageSpec(path=".."))' # Install local Trixi.jl clone
   julia --project=. -e 'using Pkg; Pkg.add(["OrdinaryDiffEq", "Trixi2Vtk", "Plots", "StaticArrays"])' # Install additional packages
   ```
-* Run the individual examples using julia, e.g.,
+* Run the examples using Julia:
   ```bash
   julia --project=. --check-bounds=no --threads=1 -e 'include(joinpath("..", "..", "tests", "elixir_advection_free_stream_mimetic_metrics.jl"))'
-  ```
-* The simulation files will be stored in an output folder. To visualize with paraview use Trixi2Vtk, e.g.,:
-  ```bash
-  julia --project=. --check-bounds=no --threads=1 -e 'using Trixi2Vtk ; trixi2vtk(joinpath("..", "..", "..", "tests", "out", "solution_0*.h5"), output_directory = joinpath("..", "..", "..", "tests", "out"))'
   ```

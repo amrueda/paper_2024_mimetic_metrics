@@ -227,15 +227,18 @@ for polydeg = 1:max_polydeg
 end
 
 
-plot(
+p1 = plot(
     3:max_polydeg,
     errors_sol_L2[3:end, 1],
     yaxis = :log,
-    label = "standard",
+    label = "Kopriva",
     linewidth = 2,
     thickness_scaling = 1,
+    ylabel = "L2 error",
+    xlabel = "polynomial degree",
 )
 plot!(
+    p1,
     3:max_polydeg,
     errors_sol_L2[3:end, 2],
     yaxis = :log,
@@ -243,3 +246,65 @@ plot!(
     linewidth = 2,
     thickness_scaling = 1,
 )
+
+p2 = plot(
+    3:max_polydeg,
+    errors_sol_inf[3:end, 1],
+    yaxis = :log,
+    label = "Kopriva",
+    linewidth = 2,
+    thickness_scaling = 1,
+    ylabel = "Linf error",
+    xlabel = "polynomial degree",
+)
+plot!(
+    p2,
+    3:max_polydeg,
+    errors_sol_inf[3:end, 2],
+    yaxis = :log,
+    label = "mimetic",
+    linewidth = 2,
+    thickness_scaling = 1,
+)
+p3 = plot(
+    3:max_polydeg,
+    errors_normals_L2[3:end, 1],
+    yaxis = :log,
+    label = "Kopriva",
+    linewidth = 2,
+    thickness_scaling = 1,
+    ylabel = "L2 error",
+    xlabel = "polynomial degree",
+)
+plot!(
+    p3,
+    3:max_polydeg,
+    errors_normals_L2[3:end, 2],
+    yaxis = :log,
+    label = "mimetic",
+    linewidth = 2,
+    thickness_scaling = 1,
+)
+
+p4 = plot(
+    3:max_polydeg,
+    errors_normals_inf[3:end, 1],
+    yaxis = :log,
+    label = "Kopriva",
+    linewidth = 2,
+    thickness_scaling = 1,
+    ylabel = "Linf error",
+    xlabel = "polynomial degree",
+)
+plot!(
+    p4,
+    3:max_polydeg,
+    errors_normals_inf[3:end, 2],
+    yaxis = :log,
+    label = "mimetic",
+    linewidth = 2,
+    thickness_scaling = 1,
+)
+
+
+plot(p1, p2, p3, p4)
