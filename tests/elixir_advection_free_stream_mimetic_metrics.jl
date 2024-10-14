@@ -233,6 +233,9 @@ p1 = plot(
     yaxis = :log,
     label = "Kopriva",
     linewidth = 2,
+    marker = :circle,
+    linestyle = :dash,
+    seriescolor = :black,
     thickness_scaling = 1,
     ylabel = "L2 error",
     xlabel = "polynomial degree",
@@ -242,10 +245,14 @@ plot!(
     3:max_polydeg,
     errors_sol_L2[3:end, 2],
     yaxis = :log,
-    label = "mimetic",
+    label = "Mimetic",
     linewidth = 2,
+    marker = :square,
+    #linestyle=:dash,
+    seriescolor = :black,
     thickness_scaling = 1,
 )
+savefig("fsp_L2_errors.pdf")
 
 p2 = plot(
     3:max_polydeg,
@@ -253,6 +260,9 @@ p2 = plot(
     yaxis = :log,
     label = "Kopriva",
     linewidth = 2,
+    marker = :circle,
+    linestyle = :dash,
+    seriescolor = :black,
     thickness_scaling = 1,
     ylabel = "Linf error",
     xlabel = "polynomial degree",
@@ -262,16 +272,24 @@ plot!(
     3:max_polydeg,
     errors_sol_inf[3:end, 2],
     yaxis = :log,
-    label = "mimetic",
+    label = "Mimetic",
     linewidth = 2,
+    marker = :square,
+    seriescolor = :black,
     thickness_scaling = 1,
+    legend = :topleft,
 )
+savefig("fsp_Linf_errors.pdf")
+
 p3 = plot(
     3:max_polydeg,
     errors_normals_L2[3:end, 1],
     yaxis = :log,
     label = "Kopriva",
     linewidth = 2,
+    marker = :circle,
+    linestyle = :dash,
+    seriescolor = :black,
     thickness_scaling = 1,
     ylabel = "L2 error",
     xlabel = "polynomial degree",
@@ -281,8 +299,10 @@ plot!(
     3:max_polydeg,
     errors_normals_L2[3:end, 2],
     yaxis = :log,
-    label = "mimetic",
+    label = "Mimetic",
     linewidth = 2,
+    marker = :square,
+    seriescolor = :black,
     thickness_scaling = 1,
 )
 
@@ -292,6 +312,9 @@ p4 = plot(
     yaxis = :log,
     label = "Kopriva",
     linewidth = 2,
+    marker = :circle,
+    linestyle = :dash,
+    seriescolor = :black,
     thickness_scaling = 1,
     ylabel = "Linf error",
     xlabel = "polynomial degree",
@@ -303,6 +326,8 @@ plot!(
     yaxis = :log,
     label = "mimetic",
     linewidth = 2,
+    marker = :square,
+    seriescolor = :black,
     thickness_scaling = 1,
 )
 
