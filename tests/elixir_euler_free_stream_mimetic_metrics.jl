@@ -91,8 +91,8 @@ max_polydeg = 25
 
 errors_normals_inf = zeros(max_polydeg,3)
 errors_normals_L2 = zeros(max_polydeg,3)
-errors_sol_inf = zeros(max_polydeg,3)
-errors_sol_L2 = zeros(max_polydeg,3)
+errors_sol_inf = zeros(5,max_polydeg,3)
+errors_sol_L2 = zeros(5,max_polydeg,3)
 exact_jacobian = true
 final_time = 1e0
 initial_condition = initial_condition_constant
@@ -103,7 +103,7 @@ for polydeg in 1:max_polydeg
   # Create DG solver with polynomial degree = 3 and (local) Lax-Friedrichs/Rusanov flux as surface flux
   solver = DGSEM(polydeg, flux_lax_friedrichs)
 
-  # Create curved mesh with 8 x 8 x 8 elements
+  # Create curved mesh with 2 x 2 x 2 elements
   mesh = StructuredMesh(cells_per_dimension, mapping; mimetic = false, exact_jacobian = false)
 
   # A semidiscre  tization collects data structures and functions for the spatial discretization
@@ -137,47 +137,10 @@ for polydeg in 1:max_polydeg
   
   errors = analysis_callback(sol)
 
-  errors_sol_L2[polydeg, 1] = errors.l2[1]
-  errors_sol_inf[polydeg, 1] = errors.linf[1]
-  #=
-  # Create curved mesh with 8 x 8 x 8 elements
-  mesh = StructuredMesh(cells_per_dimension, mapping; mimetic = true, exact_jacobian = true)
-
-  # A semidiscretization collects data structures and functions for the spatial discretization
-  semi = SemidiscretizationHyperbolic(mesh, equations, initial_condition, solver)
-
-  error_inf, error_L2 = compute_error(solver, semi, cells_per_dimension)
-  errors_normals_inf[polydeg,2] = error_inf
-  errors_normals_L2[polydeg,2] = error_L2
-
-  # Create ODE problem with time span from 0.0 to 1.0
-  ode = semidiscretize(semi, (0.0, final_time));
-
-  # The AnalysisCallback allows to analyse the solution in regular intervals and prints the results
-  analysis_callback = AnalysisCallback(semi, interval=100)
-
-  # The StepsizeCallback handles the re-calculation of the maximum Δt after each time step
-  stepsize_callback = StepsizeCallback(cfl=0.1)
-
-  # Create a CallbackSet to collect all callbacks such that they can be passed to the ODE solver
-  callbacks = CallbackSet(analysis_callback, stepsize_callback)
-
-
-  ###############################################################################
-  # run the simulation
-
-  # OrdinaryDiffEq's `solve` method evolves the solution in time and executes the passed callbacks
-  sol = solve(ode, Euler(), #, CarpenterKennedy2N54(williamson_condition=false),
-              dt=1.0, # solve needs some value here but it will be overwritten by the stepsize_callback
-              save_everystep=false, callback=callbacks);
-
-  errors = analysis_callback(sol)
-
-  errors_sol_L2[polydeg, 2] = errors.l2[1]
-  errors_sol_inf[polydeg, 2] = errors.linf[1]
-  =#
+  errors_sol_L2[:, polydeg, 1] = errors.l2
+  errors_sol_inf[:, polydeg, 1] = errors.linf
   
- # Create curved mesh with 8 x 8 x 8 elements
+ # Create curved mesh with 2 x 2 x 2 elements
  mesh = StructuredMesh(cells_per_dimension, mapping; mimetic = true, exact_jacobian = false)
 
  # A semidiscretization collects data structures and functions for the spatial discretization
@@ -210,50 +173,27 @@ for polydeg in 1:max_polydeg
 
  errors = analysis_callback(sol)
 
- errors_sol_L2[polydeg, 2] = errors.l2[1]
- errors_sol_inf[polydeg, 2] = errors.linf[1]
+ errors_sol_L2[:, polydeg, 2] = errors.l2
+ errors_sol_inf[:, polydeg, 2] = errors.linf
  
 end
-#plot(errors_normals_L2[2:end,1], yaxis=:log, ylabel = "discrete L2 norm", xlabel = "polynomial degree", label = "standard", linewidth=2, thickness_scaling = 1)
-#plot!(errors_normals_L2[2:end,2], yaxis=:log, ylabel = "discrete L2 norm", xlabel = "polynomial degree", label = "mimetic", linewidth=2, thickness_scaling = 1)
 
+mkdir("../out")
 
-plot(3:max_polydeg,errors_sol_L2[3:end,1], yaxis=:log, label = "standard", linewidth=2, thickness_scaling = 1)
-plot!(3:max_polydeg,errors_sol_L2[3:end,2], yaxis=:log, label = "mimetic", linewidth=2, thickness_scaling = 1)
+for i in 1:5
+  local p = plot(1:max_polydeg,errors_sol_L2[i,1:end,1], yaxis=:log, label = "Kopriva", linewidth=3, thickness_scaling = 2, legendfontsize = 8, tickfontsize = 10, size=(1200,900))
+  plot!(p,1:max_polydeg,errors_sol_L2[i,1:end,2], yaxis=:log, label = "mimetic", linewidth=3, thickness_scaling = 2, legendfontsize = 8, tickfontsize = 10, size=(1200,900))
+  savefig(p, joinpath("..", "out", "euler_l2_error_" * Trixi.varnames(cons2cons, equations)[i]))
 
+  p = plot(1:max_polydeg,errors_sol_inf[i,1:end,1], yaxis=:log, label = "Kopriva", linewidth=3, thickness_scaling = 2, legendfontsize = 8, tickfontsize = 10, size=(1200,900))
+  plot!(p,1:max_polydeg,errors_sol_inf[i,1:end,2], yaxis=:log, label = "mimetic", linewidth=3, thickness_scaling = 2, legendfontsize = 8, tickfontsize = 10, size=(1200,900))
+  savefig(p, joinpath("..", "out", "euler_linf_error_" * Trixi.varnames(cons2cons, equations)[i]))
+end
 
-#= 
-###############################################################################
-# ODE solvers, callbacks etc.
+p = plot(1:max_polydeg,errors_normals_L2[1:end,1], yaxis=:log, label = "Kopriva", linewidth=3, thickness_scaling = 2, legendfontsize = 8, tickfontsize = 10, size=(1200,900))
+plot!(p,1:max_polydeg,errors_normals_L2[1:end,2], yaxis=:log, label = "mimetic", linewidth=3, thickness_scaling = 2, legendfontsize = 8, tickfontsize = 10, size=(1200,900))
+savefig(p, joinpath("..", "out", "contravariant_l2_error"))
 
-# Create ODE problem with time span from 0.0 to 1.0
-ode = semidiscretize(semi, (0.0, 1.0));
-
-# At the beginning of the main loop, the SummaryCallback prints a summary of the simulation setup
-# and resets the timers
-summary_callback = SummaryCallback()
-
-# The AnalysisCallback allows to analyse the solution in regular intervals and prints the results
-analysis_callback = AnalysisCallback(semi, interval=100)
-
-# The SaveSolutionCallback allows to save the solution to a file in regular intervals
-save_solution = SaveSolutionCallback(interval=100,
-                                     solution_variables=cons2prim)
-
-# The StepsizeCallback handles the re-calculation of the maximum Δt after each time step
-stepsize_callback = StepsizeCallback(cfl=0.1)
-
-# Create a CallbackSet to collect all callbacks such that they can be passed to the ODE solver
-callbacks = CallbackSet(summary_callback, analysis_callback, save_solution, stepsize_callback)
-
-
-###############################################################################
-# run the simulation
-
-# OrdinaryDiffEq's `solve` method evolves the solution in time and executes the passed callbacks
-sol = solve(ode, CarpenterKennedy2N54(williamson_condition=false),
-            dt=1.0, # solve needs some value here but it will be overwritten by the stepsize_callback
-            save_everystep=false, callback=callbacks);
-
-# Print the timer summary
-summary_callback() =#
+p = plot(1:max_polydeg,errors_normals_inf[1:end,1], yaxis=:log, label = "Kopriva", linewidth=3, thickness_scaling = 2, legendfontsize = 8, tickfontsize = 10, size=(1200,900))
+plot!(p,1:max_polydeg,errors_normals_inf[1:end,2], yaxis=:log, label = "mimetic", linewidth=3, thickness_scaling = 2, legendfontsize = 8, tickfontsize = 10, size=(1200,900))
+savefig(p, joinpath("..", "out", "contravariant_linf_error"));
