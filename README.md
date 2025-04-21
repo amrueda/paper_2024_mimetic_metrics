@@ -31,11 +31,9 @@ To run the examples, follow the instructions:
   ```
 * Run the examples using Julia:
   ```bash
-  julia --project=. --threads=1 -e 'include(joinpath("..", "..", "tests", "elixir_advection_free_stream_mimetic_metrics.jl"))'
   julia --project=. --threads=1 -e 'include(joinpath("..", "..", "tests", "elixir_euler_free_stream_mimetic_metrics.jl"))'
   ```
 * We also have a light-weight example (not shown in the paper) that runs the linear advection equation on a curvilinear grid
   ```bash
   julia --project=. --threads=1 -e 'include(joinpath("..", "..", "tests", "elixir_advection_free_stream_mimetic_metrics.jl"))'
-  julia --project=. --threads=1 -e 'include(joinpath("..", "..", "tests", "elixir_euler_free_stream_mimetic_metrics.jl"))'
   ```
