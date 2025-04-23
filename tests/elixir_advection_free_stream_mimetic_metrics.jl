@@ -127,7 +127,6 @@ errors_normals_inf = zeros(max_polydeg, 3)
 errors_normals_L2 = zeros(max_polydeg, 3)
 errors_sol_inf = zeros(max_polydeg, 3)
 errors_sol_L2 = zeros(max_polydeg, 3)
-exact_jacobian = true
 final_time = 1e0
 initial_condition = initial_condition_constant
 
@@ -226,110 +225,131 @@ for polydeg = 1:max_polydeg
 
 end
 
+if !isdir(joinpath("..", "..", "out"))
+    mkdir(joinpath("..", "..", "out")) 
+end
 
 p1 = plot(
-    3:max_polydeg,
-    errors_sol_L2[3:end, 1],
+    1:max_polydeg,
+    errors_sol_L2[1:end, 1],
     yaxis = :log,
     label = "Kopriva",
     linewidth = 2,
+    thickness_scaling = 1.4,
+    legendfontsize = 10,
+    tickfontsize = 10,
     marker = :circle,
     linestyle = :dash,
     seriescolor = :black,
-    thickness_scaling = 1,
+    legend = :bottomright,
     ylabel = "L2 error",
-    xlabel = "polynomial degree",
+    xlabel = "Polynomial degree",
 )
 plot!(
-    p1,
-    3:max_polydeg,
-    errors_sol_L2[3:end, 2],
+    1:max_polydeg,
+    errors_sol_L2[1:end, 2],
     yaxis = :log,
     label = "Mimetic",
     linewidth = 2,
+    thickness_scaling = 1.4,
+    legendfontsize = 10,
+    tickfontsize = 10,
     marker = :square,
-    #linestyle=:dash,
     seriescolor = :black,
-    thickness_scaling = 1,
 )
-savefig("fsp_L2_errors.pdf")
+savefig(p1, joinpath("..", "..", "out", "advection_fsp_L2_errors.pdf"))
 
 p2 = plot(
-    3:max_polydeg,
-    errors_sol_inf[3:end, 1],
+    1:max_polydeg,
+    errors_sol_inf[1:end, 1],
     yaxis = :log,
     label = "Kopriva",
     linewidth = 2,
+    thickness_scaling = 1.4,
+    legendfontsize = 10,
+    tickfontsize = 10,
     marker = :circle,
     linestyle = :dash,
     seriescolor = :black,
-    thickness_scaling = 1,
+    legend = :bottomright,
     ylabel = "Linf error",
-    xlabel = "polynomial degree",
+    xlabel = "Polynomial degree",
 )
 plot!(
     p2,
-    3:max_polydeg,
-    errors_sol_inf[3:end, 2],
+    1:max_polydeg,
+    errors_sol_inf[1:end, 2],
     yaxis = :log,
     label = "Mimetic",
     linewidth = 2,
+    thickness_scaling = 1.4,
+    legendfontsize = 10,
+    tickfontsize = 10,
     marker = :square,
     seriescolor = :black,
-    thickness_scaling = 1,
-    legend = :topleft,
 )
-savefig("fsp_Linf_errors.pdf")
+savefig(p2, joinpath("..", "..", "out", "advection_fsp_Linf_errors.pdf"))
 
 p3 = plot(
-    3:max_polydeg,
-    errors_normals_L2[3:end, 1],
+    1:max_polydeg,
+    errors_normals_L2[1:end, 1],
     yaxis = :log,
     label = "Kopriva",
     linewidth = 2,
+    thickness_scaling = 1.4,
+    legendfontsize = 10,
+    tickfontsize = 10,
     marker = :circle,
     linestyle = :dash,
     seriescolor = :black,
-    thickness_scaling = 1,
+    legend = :topright,
     ylabel = "L2 error",
-    xlabel = "polynomial degree",
+    xlabel = "Polynomial degree",
 )
 plot!(
     p3,
-    3:max_polydeg,
-    errors_normals_L2[3:end, 2],
+    1:max_polydeg,
+    errors_normals_L2[1:end, 2],
     yaxis = :log,
     label = "Mimetic",
     linewidth = 2,
+    thickness_scaling = 1.4,
+    legendfontsize = 10,
+    tickfontsize = 10,
     marker = :square,
     seriescolor = :black,
-    thickness_scaling = 1,
 )
+savefig(p3, joinpath("..", "..", "out", "advection_contravariant_L2_errors.pdf"))
 
 p4 = plot(
-    3:max_polydeg,
-    errors_normals_inf[3:end, 1],
+    1:max_polydeg,
+    errors_normals_inf[1:end, 1],
     yaxis = :log,
     label = "Kopriva",
     linewidth = 2,
+    thickness_scaling = 1.4,
+    legendfontsize = 10,
+    tickfontsize = 10,
     marker = :circle,
     linestyle = :dash,
     seriescolor = :black,
-    thickness_scaling = 1,
+    legend = :topright,
     ylabel = "Linf error",
-    xlabel = "polynomial degree",
+    xlabel = "Polynomial degree",
 )
 plot!(
     p4,
-    3:max_polydeg,
-    errors_normals_inf[3:end, 2],
+    1:max_polydeg,
+    errors_normals_inf[1:end, 2],
     yaxis = :log,
-    label = "mimetic",
+    label = "Mimetic",
     linewidth = 2,
+    thickness_scaling = 1.4,
+    legendfontsize = 10,
+    tickfontsize = 10,
     marker = :square,
     seriescolor = :black,
-    thickness_scaling = 1,
 )
-
+savefig(p4, joinpath("..", "..", "out", "advection_contravariant_Linf_errors.pdf"))
 
 plot(p1, p2, p3, p4)

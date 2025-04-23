@@ -93,11 +93,10 @@ errors_normals_inf = zeros(max_polydeg,3)
 errors_normals_L2 = zeros(max_polydeg,3)
 errors_sol_inf = zeros(5,max_polydeg,3)
 errors_sol_L2 = zeros(5,max_polydeg,3)
-exact_jacobian = true
 final_time = 1e0
 initial_condition = initial_condition_constant
 
-for polydeg in 1:max_polydeg
+for polydeg in 1:25
   println("Computing polydeg = ", polydeg)
 
   # Create DG solver with polynomial degree = 3 and (local) Lax-Friedrichs/Rusanov flux as surface flux
@@ -178,22 +177,137 @@ for polydeg in 1:max_polydeg
  
 end
 
-mkdir("../out")
-
-for i in 1:5
-  local p = plot(1:max_polydeg,errors_sol_L2[i,1:end,1], yaxis=:log, label = "Kopriva", linewidth=3, thickness_scaling = 2, legendfontsize = 8, tickfontsize = 10, size=(1200,900))
-  plot!(p,1:max_polydeg,errors_sol_L2[i,1:end,2], yaxis=:log, label = "mimetic", linewidth=3, thickness_scaling = 2, legendfontsize = 8, tickfontsize = 10, size=(1200,900))
-  savefig(p, joinpath("..", "out", "euler_l2_error_" * Trixi.varnames(cons2cons, equations)[i]))
-
-  p = plot(1:max_polydeg,errors_sol_inf[i,1:end,1], yaxis=:log, label = "Kopriva", linewidth=3, thickness_scaling = 2, legendfontsize = 8, tickfontsize = 10, size=(1200,900))
-  plot!(p,1:max_polydeg,errors_sol_inf[i,1:end,2], yaxis=:log, label = "mimetic", linewidth=3, thickness_scaling = 2, legendfontsize = 8, tickfontsize = 10, size=(1200,900))
-  savefig(p, joinpath("..", "out", "euler_linf_error_" * Trixi.varnames(cons2cons, equations)[i]))
+if !isdir(joinpath("..", "..", "out"))
+  mkdir(joinpath("..", "..", "out"))
 end
 
-p = plot(1:max_polydeg,errors_normals_L2[1:end,1], yaxis=:log, label = "Kopriva", linewidth=3, thickness_scaling = 2, legendfontsize = 8, tickfontsize = 10, size=(1200,900))
-plot!(p,1:max_polydeg,errors_normals_L2[1:end,2], yaxis=:log, label = "mimetic", linewidth=3, thickness_scaling = 2, legendfontsize = 8, tickfontsize = 10, size=(1200,900))
-savefig(p, joinpath("..", "out", "contravariant_l2_error"))
+p1 = plot();
+p2 = plot();
 
-p = plot(1:max_polydeg,errors_normals_inf[1:end,1], yaxis=:log, label = "Kopriva", linewidth=3, thickness_scaling = 2, legendfontsize = 8, tickfontsize = 10, size=(1200,900))
-plot!(p,1:max_polydeg,errors_normals_inf[1:end,2], yaxis=:log, label = "mimetic", linewidth=3, thickness_scaling = 2, legendfontsize = 8, tickfontsize = 10, size=(1200,900))
-savefig(p, joinpath("..", "out", "contravariant_linf_error"));
+for i in 1:5
+  global p1 = plot(
+    1:max_polydeg,
+    errors_sol_L2[i, 1:end, 1],
+    yaxis = :log,
+    label = "Kopriva",
+    linewidth = 2,
+    thickness_scaling = 1.4,
+    legendfontsize = 10,
+    tickfontsize = 10,
+    marker = :circle,
+    linestyle = :dash,
+    seriescolor = :black,
+    legend = :bottomright,
+    ylabel = "L2 error",
+    xlabel = "Polynomial degree",
+  )
+  plot!(
+    p1,
+    1:max_polydeg,
+    errors_sol_L2[i, 1:end, 2],
+    yaxis = :log,
+    label = "Mimetic",
+    linewidth = 2,
+    thickness_scaling = 1.4,
+    legendfontsize = 10,
+    tickfontsize = 10,
+    marker = :square,
+    seriescolor = :black,
+  )
+  savefig(p1, joinpath("..", "..", "out", "euler_fsp_L2_errors_" * Trixi.varnames(cons2cons, equations)[i]) * ".pdf")
+
+  global p2 = plot(
+    1:max_polydeg,
+    errors_sol_inf[i, 1:end, 1],
+    yaxis = :log,
+    label = "Kopriva",
+    linewidth = 2,
+    thickness_scaling = 1.4,
+    legendfontsize = 10,
+    tickfontsize = 10,
+    marker = :circle,
+    linestyle = :dash,
+    seriescolor = :black,
+    legend = :bottomright,
+    ylabel = "Linf error",
+    xlabel = "Polynomial degree",
+  )
+  plot!(
+    p2,
+    1:max_polydeg,
+    errors_sol_inf[i, 1:end, 2],
+    yaxis = :log,
+    label = "Mimetic",
+    linewidth = 2,
+    thickness_scaling = 1.4,
+    legendfontsize = 10,
+    tickfontsize = 10,
+    marker = :square,
+    seriescolor = :black,
+  )
+  savefig(p2, joinpath("..", "..", "out", "euler_fsp_Linf_errors_" * Trixi.varnames(cons2cons, equations)[i] * ".pdf"))
+end
+
+p3 = plot(
+    1:max_polydeg,
+    errors_normals_L2[1:end, 1],
+    yaxis = :log,
+    label = "Kopriva",
+    linewidth = 2,
+    thickness_scaling = 1.4,
+    legendfontsize = 10,
+    tickfontsize = 10,
+    marker = :circle,
+    linestyle = :dash,
+    seriescolor = :black,
+    legend = :topright,
+    ylabel = "L2 error",
+    xlabel = "Polynomial degree",
+)
+plot!(
+    p3,
+    1:max_polydeg,
+    errors_normals_L2[1:end, 2],
+    yaxis = :log,
+    label = "Mimetic",
+    linewidth = 2,
+    thickness_scaling = 1.4,
+    legendfontsize = 10,
+    tickfontsize = 10,
+    marker = :square,
+    seriescolor = :black,
+)
+savefig(p3, joinpath("..", "..", "out", "euler_contravariant_L2_errors.pdf"))
+
+p4 = plot(
+    1:max_polydeg,
+    errors_normals_inf[1:end, 1],
+    yaxis = :log,
+    label = "Kopriva",
+    linewidth = 2,
+    thickness_scaling = 1.4,
+    legendfontsize = 10,
+    tickfontsize = 10,
+    marker = :circle,
+    linestyle = :dash,
+    seriescolor = :black,
+    legend = :topright,
+    ylabel = "Linf error",
+    xlabel = "Polynomial degree",
+)
+plot!(
+    p4,
+    1:max_polydeg,
+    errors_normals_inf[1:end, 2],
+    yaxis = :log,
+    label = "Mimetic",
+    linewidth = 2,
+    thickness_scaling = 1.4,
+    legendfontsize = 10,
+    tickfontsize = 10,
+    marker = :square,
+    seriescolor = :black,
+)
+savefig(p4, joinpath("..", "..", "out", "euler_contravariant_Linf_errors.pdf"))
+
+plot(p1, p2, p3, p4)
