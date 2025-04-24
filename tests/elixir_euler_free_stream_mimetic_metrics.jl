@@ -96,6 +96,8 @@ errors_sol_L2 = zeros(5,max_polydeg,3)
 final_time = 1e0
 initial_condition = initial_condition_constant
 
+cfl = 0.2
+
 for polydeg in 1:25
   println("Computing polydeg = ", polydeg)
 
@@ -119,7 +121,7 @@ for polydeg in 1:25
   analysis_callback = AnalysisCallback(semi, interval=100, analysis_polydeg = 50)
 
   # The StepsizeCallback handles the re-calculation of the maximum Δt after each time step
-  stepsize_callback = StepsizeCallback(cfl=0.1)
+  stepsize_callback = StepsizeCallback(cfl=cfl)
 
   # Create a CallbackSet to collect all callbacks such that they can be passed to the ODE solver
   callbacks = CallbackSet(analysis_callback, stepsize_callback)
@@ -156,7 +158,7 @@ for polydeg in 1:25
  analysis_callback = AnalysisCallback(semi, interval=100, analysis_polydeg = 50)
 
  # The StepsizeCallback handles the re-calculation of the maximum Δt after each time step
- stepsize_callback = StepsizeCallback(cfl=0.1)
+ stepsize_callback = StepsizeCallback(cfl=cfl)
 
  # Create a CallbackSet to collect all callbacks such that they can be passed to the ODE solver
  callbacks = CallbackSet(analysis_callback, stepsize_callback)
