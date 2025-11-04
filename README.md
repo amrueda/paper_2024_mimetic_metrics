@@ -3,7 +3,21 @@
 This directory contains code and instructions to reproduce the numerical
 experiments reported in the article
 
-* Bach, D., Rueda-Ramírez, A., Kopriva, D. A., & Gassner, G. J. (2024). Mimetic Metrics for the DGSEM. [arXiv preprint:2410.14502](https://arxiv.org/abs/2410.14502).
+* Bach, D., Rueda-Ramírez, A., Kopriva, D. A., & Gassner, G. J. (2025). Mimetic Metrics for the DGSEM. [arXiv preprint:2410.14502](https://arxiv.org/abs/2410.14502), [DOI: 10.1007/s10915-025-03082-x](https://doi.org/10.1007/s10915-025-03082-x).
+
+```
+@article{bach2025mimetic,
+  title={Mimetic Metrics for the DGSEM},
+  author={Bach, Daniel and Rueda-Ram{\'\i}rez, Andr{\'e}s and Kopriva, David A and Gassner, Gregor J},
+  journal={Journal of Scientific Computing},
+  volume={105},
+  number={2},
+  pages={1--8},
+  year={2025},
+  doi={10.1007/s10915-025-03082-x},
+  publisher={Springer}
+}
+```
 
 The results were obtained using Julia v1.11.5 and [this version of Trixi.jl](https://github.com/amrueda/Trixi.jl/tree/987cdbb78924d1159dc14d2e6e78de4a31e94770) (release tag [mimetic_metrics_paper](https://github.com/amrueda/Trixi.jl/releases/tag/mimetic_metrics_paper)). When this reproducibility repository was last updated, the implementation of the mimetic metrics was not yet merged into the main [Trixi.jl](https://github.com/trixi-framework/Trixi.jl/) repository.
 
