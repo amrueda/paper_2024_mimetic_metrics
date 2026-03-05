@@ -39,8 +39,7 @@ To run the examples, follow the instructions:
 * Create a run directory and install all the dependencies of Trixi.jl:
   ```bash
   cd ../run
-  julia --project=. -e 'using Pkg; Pkg.develop(PackageSpec(path=".."))' # Install local Trixi.jl clone
-  julia --project=. -e 'using Pkg; Pkg.instantiate()' # Install additional packages
+  julia +1.11.5 --project=. -e "using Pkg; Pkg.instantiate()"
   ```
 * Run the examples using Julia:
   ```bash
