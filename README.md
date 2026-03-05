@@ -39,13 +39,14 @@ To run the examples, follow the instructions:
 * Create a run directory and install all the dependencies of Trixi.jl:
   ```bash
   cd ../run
+  julia +1.11.5 --project=. -e 'using Pkg; Pkg.develop(PackageSpec(path="../Trixi.jl"))'
   julia +1.11.5 --project=. -e "using Pkg; Pkg.instantiate()"
   ```
 * Run the examples using Julia:
   ```bash
-  julia --project=. --threads=1 -e 'include(joinpath("..", "tests", "elixir_euler_free_stream_mimetic_metrics.jl"))'
+  julia +1.11.5 --project=. --threads=1 -e 'include(joinpath("..", "tests", "elixir_euler_free_stream_mimetic_metrics.jl"))'
   ```
 * We also have a light-weight example (not shown in the paper) that runs the linear advection equation on a curvilinear grid
   ```bash
-  julia --project=. --threads=1 -e 'include(joinpath("..", "tests", "elixir_advection_free_stream_mimetic_metrics.jl"))'
+  julia +1.11.5 --project=. --threads=1 -e 'include(joinpath("..", "tests", "elixir_advection_free_stream_mimetic_metrics.jl"))'
   ```
