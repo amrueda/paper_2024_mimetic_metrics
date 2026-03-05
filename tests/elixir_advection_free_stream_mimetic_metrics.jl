@@ -352,6 +352,6 @@ plot!(
     marker = :square,
     seriescolor = :black,
 )
-savefig(p4, joinpath("..", "..", "out", "advection_contravariant_Linf_errors.pdf"))
+savefig(p4, joinpath("..", "out", "advection_contravariant_Linf_errors.pdf"))
 
 plot(p1, p2, p3, p4)
