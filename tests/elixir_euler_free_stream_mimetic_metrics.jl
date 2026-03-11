@@ -179,8 +179,8 @@ for polydeg in 1:25
  
 end
 
-if !isdir(joinpath("..", "..", "out"))
-  mkdir(joinpath("..", "..", "out"))
+if !isdir(joinpath("..", "out"))
+  mkdir(joinpath("..", "out"))
 end
 
 p1 = plot();
@@ -216,7 +216,7 @@ for i in 1:5
     marker = :square,
     seriescolor = :black,
   )
-  savefig(p1, joinpath("..", "..", "out", "euler_fsp_L2_errors_" * Trixi.varnames(cons2cons, equations)[i]) * ".pdf")
+  savefig(p1, joinpath("..", "out", "euler_fsp_L2_errors_" * Trixi.varnames(cons2cons, equations)[i]) * ".pdf")
 
   global p2 = plot(
     1:max_polydeg,
@@ -247,7 +247,7 @@ for i in 1:5
     marker = :square,
     seriescolor = :black,
   )
-  savefig(p2, joinpath("..", "..", "out", "euler_fsp_Linf_errors_" * Trixi.varnames(cons2cons, equations)[i] * ".pdf"))
+  savefig(p2, joinpath("..", "out", "euler_fsp_Linf_errors_" * Trixi.varnames(cons2cons, equations)[i] * ".pdf"))
 end
 
 p3 = plot(
@@ -279,7 +279,7 @@ plot!(
     marker = :square,
     seriescolor = :black,
 )
-savefig(p3, joinpath("..", "..", "out", "euler_contravariant_L2_errors.pdf"))
+savefig(p3, joinpath("..", "out", "euler_contravariant_L2_errors.pdf"))
 
 p4 = plot(
     1:max_polydeg,
