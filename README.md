@@ -36,7 +36,7 @@ To run the examples, follow the instructions:
   cd Trixi.jl
   git checkout 987cdbb78924d1159dc14d2e6e78de4a31e94770
   ```
-* Create a run directory and install all the dependencies of Trixi.jl:
+* Move to the run directory and install all the dependencies of Trixi.jl:
   ```bash
   cd ../run
   julia +1.11.5 --project=. -e 'using Pkg; Pkg.develop(PackageSpec(path="../Trixi.jl"))'
