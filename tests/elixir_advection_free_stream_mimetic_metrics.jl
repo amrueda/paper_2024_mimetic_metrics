@@ -227,8 +227,8 @@ for polydeg = 1:max_polydeg
 
 end
 
-if !isdir(joinpath("..", "..", "out"))
-    mkdir(joinpath("..", "..", "out")) 
+if !isdir(joinpath("..", "out"))
+    mkdir(joinpath("..", "out")) 
 end
 
 p1 = plot(
@@ -259,7 +259,7 @@ plot!(
     marker = :square,
     seriescolor = :black,
 )
-savefig(p1, joinpath("..", "..", "out", "advection_fsp_L2_errors.pdf"))
+savefig(p1, joinpath("..", "out", "advection_fsp_L2_errors.pdf"))
 
 p2 = plot(
     1:max_polydeg,
@@ -290,7 +290,7 @@ plot!(
     marker = :square,
     seriescolor = :black,
 )
-savefig(p2, joinpath("..", "..", "out", "advection_fsp_Linf_errors.pdf"))
+savefig(p2, joinpath("..", "out", "advection_fsp_Linf_errors.pdf"))
 
 p3 = plot(
     1:max_polydeg,
@@ -321,7 +321,7 @@ plot!(
     marker = :square,
     seriescolor = :black,
 )
-savefig(p3, joinpath("..", "..", "out", "advection_contravariant_L2_errors.pdf"))
+savefig(p3, joinpath("..", "out", "advection_contravariant_L2_errors.pdf"))
 
 p4 = plot(
     1:max_polydeg,
@@ -352,6 +352,6 @@ plot!(
     marker = :square,
     seriescolor = :black,
 )
-savefig(p4, joinpath("..", "..", "out", "advection_contravariant_Linf_errors.pdf"))
+savefig(p4, joinpath("..", "out", "advection_contravariant_Linf_errors.pdf"))
 
 plot(p1, p2, p3, p4)
